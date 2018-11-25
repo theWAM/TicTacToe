@@ -77,7 +77,7 @@ def board_rules():
 # DRIVING FUNCTIONS ======================================================
 
 def new_board(): # Wipes board by reinitializing variable
-    ticArr = [0, 1, 2, 3, 4, 5, 6, 7, 8] # Initializes "empty" board
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8] # Initializes "empty" board
 
 def p_choice(arr, player): # Draws current board, and asks for a choice (positive int) for the next space to be taken; draws x or o based on who's turn it is
     board(arr)
@@ -119,7 +119,7 @@ def p_choice(arr, player): # Draws current board, and asks for a choice (positiv
             turn = False
     
     sp(4)
-    win_decide(arr)
+    return win_decide(arr)
     
 def ez_ai_choice(arr, player):
     turn = False
@@ -151,50 +151,42 @@ def win_decide(arr): # Runs through all possible winning formations and declares
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[0])))
-            ask_quit()
-            return True
+            return ask_quit()
         elif arr[3] == arr[4] and arr[3] == arr[5]:
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[3])))
-            ask_quit()
-            return True
+            return ask_quit()
         elif arr[6] == arr[7] and arr[6] == arr[8]:
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[6])))
-            ask_quit()
-            return True
+            return ask_quit()
         elif arr[0] == arr[3] and arr[0] == arr[6]:
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[0])))
-            ask_quit()
-            return True
+            return ask_quit()
         elif arr[1] == arr[4] and arr[1] == arr[7]:
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[1])))
-            ask_quit()
-            return True
+            return ask_quit()
         elif arr[2] == arr[5] and arr[2] == arr[8]:
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[2])))
-            ask_quit()
-            return True
+            return ask_quit()
         elif arr[0] == arr[4] and arr[0] == arr[8]:
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[0])))
-            ask_quit()
-            return True
+            return ask_quit()
         elif arr[2] == arr[4] and arr[2] == arr[6]:
             board(arr)
             sp(1)
             print("Player {} wins!".format(player(arr[2])))
-            ask_quit()
-            return True
+            return ask_quit()
         
 
 def ask_quit(): # Asks if user would like to play again, and quits if not
@@ -206,7 +198,8 @@ def ask_quit(): # Asks if user would like to play again, and quits if not
         raise SystemExit
     elif ask == 'y':
         print("Restarting...")
-        new_board()
+    
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8]
         
 # =========================================================================
 
@@ -216,12 +209,22 @@ def ask_quit(): # Asks if user would like to play again, and quits if not
 
 # DRIVING CODE ============================================================
 
-print("Hello! Would you like to play against another person or against the computer?")
+print("Hello World! Welcome to Python Tic-Tac-Toe") 
+print("Would you like to play against another person or against the computer?")
 while True:
     
-    good_game == False
-    match_type = int(input("For PvP, press [1]; for PvC, press [2]"))
+    good_game = False
+    while good_game == False:
+        sp(1)
+        match_type = input("For PvP, press [1]; for PvC, press [2]  ")
 
+        try:
+            match_type = float(match_type)
+
+            if match_type == 1 or match_type == 2:
+                good_game = True
+        except ValueError:
+            "Please enter [1] or [2]"
 
     if match_type == 1:
         stars(2)
@@ -232,28 +235,63 @@ while True:
         
         board_rules()
 
-        p_choice(ticArr, 1)
-        p_choice(ticArr, 2)
-        p_choice(ticArr, 1)
-        p_choice(ticArr, 2)
-        p_choice(ticArr, 1)
-        p_choice(ticArr, 2)
-        p_choice(ticArr, 1)
-        p_choice(ticArr, 2)
-        p_choice(ticArr, 1)
+        ticArr = new_board()
 
-        print("The game is a tie!")
+        p_choice(ticArr, 1)
+        p_choice(ticArr, 2)
+        p_choice(ticArr, 1)
+        p_choice(ticArr, 2)
+        p_choice(ticArr, 1)
+        if win_decide(ticArr) == [0, 1, 2, 3, 4, 5, 6, 7, 8]:
+            ticArr = win_decide(ticArr)
+        else:
+            p_choice(ticArr, 2)
+            if win_decide(ticArr) == [0, 1, 2, 3, 4, 5, 6, 7, 8]:
+                ticArr = win_decide(ticArr)
+            else:
+                p_choice(ticArr, 1)
+                if win_decide(ticArr) == [0, 1, 2, 3, 4, 5, 6, 7, 8]:
+                    ticArr = win_decide(ticArr)
+                else:
+                    p_choice(ticArr, 2)
+                    if win_decide(ticArr) == [0, 1, 2, 3, 4, 5, 6, 7, 8]:
+                        ticArr = win_decide(ticArr)
+                    else:
+                        p_choice(ticArr, 1)
+
+                        print(ticArr)
+                        print("The game is a tie!")
+                        ask_quit()
         ask_quit()
 
     elif match_type == 2:
-        first_or_second = int(input("Would you like to go first or second? [1] or [2]"))
+        good_1st_2nd = False
+        while good_1st_2nd == False:
+            sp(1)
+            first_or_second = input("Would you like to go first or second? [1] or [2]   ")
+
+            try:
+                first_or_second = float(first_or_second)
+
+                if first_or_second == 1 or first_or_second == 2:
+                    good_1st_2nd = True
+
+                else:
+                    sp(1)
+                    print("Please enter [1] or [2]")
+                    sp(1)
+
+            except ValueError:
+                sp(1)
+                print("Please enter [1] or [2]")
 
         stars(2)
         sp(1)
         print("INSTRUCTIONS:")
         board_rules()
 
-        ticArr = [0, 1, 2, 3, 4, 5, 6, 7, 8] #Initializes "empty" board
+        ticArr = new_board()
+
 
         if first_or_second == 1:
             p_choice(ticArr, 1)
@@ -277,6 +315,7 @@ while True:
             p_choice(ticArr, 2)
             ez_ai_choice(ticArr, 1)
 
+        print(ticArr)
         print("The game is a tie!")
         ask_quit()
     else:
